@@ -1,0 +1,30 @@
+1. Phân tích luồng dữ liệu qua Pipeline PowerShell
+Pipeline (|) trong PowerShell cho phép kết nối nhiều lệnh để xử lý dữ liệu tuần tự. Trong bài toán thống kê sự cố TIMEOUT, luồng xử lý gồm ba bước chính:
+Sơ đồ Pipeline:
+┌──────────────────────────┐
+│  BƯỚC 1: ĐỌC TỆP LOG     │
+│  Get-Content access.log  │
+└────────────┬─────────────┘
+             │ Các dòng log
+             ▼
+┌──────────────────────────┐
+│  BƯỚC 2: LỌC DỮ LIỆU     │
+│  Giữ dòng chứa TIMEOUT   │
+│  Loại dòng NOT TIMEOUT    │
+└────────────┬─────────────┘
+             │ Các dòng hợp lệ
+             ▼
+┌──────────────────────────┐
+│  BƯỚC 3: ĐẾM KẾT QUẢ     │
+│  Lấy thuộc tính .Count   │
+└────────────┬─────────────┘
+             ▼
+       TỔNG SỐ SỰ CỐ
+
+
+2. Sự khác biệt giữa Pipeline PowerShell và CMD/Bash
+- PowerShell: Pipeline truyền các đối tượng hoặc giá trị có cấu trúc giữa các lệnh. Ví dụ, Select-String trả về đối tượng có thông tin về tên tệp, số dòng và nội dung khớp.
+- CMD/Bash: Pipeline chủ yếu truyền dữ liệu dưới dạng luồng văn bản hoặc byte giữa các chương trình. Vì vậy, việc đếm dòng thường sử dụng các công cụ như wc -l trong Bash.
+Nhờ Pipeline, PowerShell có thể đọc tệp, lọc các dòng cần thiết và đếm kết quả chỉ bằng một câu lệnh.
+3. Xử lý bẫy dữ liệu NOT TIMEOUT
+Nếu chỉ lọc từ khóa TIMEOUT, hệ thống có thể đếm nhầm dòng NOT TIMEOUT. Do đó, cần lọc hai lần liên tiếp: lần đầu giữ các dòng chứa TIMEOUT, lần thứ hai loại bỏ các dòng chứa NOT TIMEOUT.

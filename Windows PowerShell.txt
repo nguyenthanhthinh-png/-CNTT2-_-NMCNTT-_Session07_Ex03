@@ -1,0 +1,6 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+PS C:\Users\thanhthinh> @(Get-Content "today.log" | Select-String "TIMEOUT" | Where-Object { $_ -notmatch "NOT TIMEOUT"}).Count
+2
+PS C:\Users\thanhthinh>
